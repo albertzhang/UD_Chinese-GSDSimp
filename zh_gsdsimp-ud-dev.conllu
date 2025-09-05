@@ -8321,7 +8321,7 @@
 5	被	被	AUX	BB	Voice=Pass	9	aux:pass	_	SpaceAfter=No|Translit=bèi|LTranslit=bèi
 6	当年	当年	NOUN	NN	_	8	nmod	_	SpaceAfter=No|Translit=dāngnián|LTranslit=dāngnián
 7	时代	时代	NOUN	NN	_	8	nmod	_	SpaceAfter=No|Translit=shídài|LTranslit=shídài
-8	杂志	杂志	NOUN	NN	_	9	obj	_	SpaceAfter=No|Translit=zázhì|LTranslit=zázhì
+8	杂志	杂志	NOUN	NN	_	9	obl:agent	_	SpaceAfter=No|Translit=zázhì|LTranslit=zázhì
 9	评	评	VERB	VV	_	0	root	_	SpaceAfter=No|Translit=píng|LTranslit=píng
 10	为	为	VERB	VC	_	9	mark	_	SpaceAfter=No|Translit=wèi|LTranslit=wèi
 11	桑坦	桑坦	PROPN	NNP	_	15	nmod	_	SpaceAfter=No|Translit=sāngtǎn|LTranslit=sāngtǎn
