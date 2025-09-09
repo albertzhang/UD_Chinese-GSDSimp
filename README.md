@@ -51,6 +51,7 @@ This is a simplified Chinese version of the UD Chinese GSD treebank. It is initi
 Data available since: UD v2.5
 License: CC BY-SA 4.0
 Includes text: yes
+Parallel: no
 Genre: wiki
 Lemmas: automatic with corrections
 UPOS: converted with corrections
