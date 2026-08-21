@@ -1,0 +1,31 @@
+# NER merge log — UNER_Chinese-GSD IOB2 -> UD_Chinese-GSDSimp CONLLU MISC
+# date: 2026-08-21T10:38:00
+# command: python3 merge_ner.py
+# learned TC->SC map entries: 1 supplement + corpus-derived (see SUPPLEMENT_MAP + aligned-sentence learning)
+
+## train zhgsd/train1794 (sent_id: train-s1794)
+# UNER text: 水手9號於1971年11月14日到達火星，在火星軌道上工作了將近一年之久，發回了7329張照片，覆蓋了火星表面超過80%的部分，同時還對火星的兩顆衛星進行了探測。
+# UD   text: 水手9号于1971年11月14日到达火星，在火星轨道上工作了将近一年之久，发回了7329张照片，覆盖了火星表面超过80%的部分，同时还对火星的两颗卫星进行了探测。
+merge UNER[19..20] (將,近) -> UD[19] (将近) label=O
+
+## train zhgsd/train3910 (sent_id: train-s3910)
+# UNER text: 她在提到自己中學時非常認真，並在SAT考了將近滿分的優異分數。
+# UD   text: 她在提到自己中学时非常认真，并在SAT考了将近满分的优异分数。
+merge UNER[14..15] (將,近) -> UD[14] (将近) label=O
+
+## dev zhgsd/dev186 (sent_id: dev-s186)
+# UNER text: 這五篇散文與在北京創作的另五篇散文就構成了《朝花夕拾》的全部。
+# UD   text: 这五篇散文与在北京创作的另五篇散文就构成了《朝花夕拾》的全部。
+split UNER[17] (朝花) -> UD[17..18] (朝,花) label=O,O
+split UNER[18] (夕拾) -> UD[19..20] (夕,拾) label=O,O
+
+## test zhgsd/test97 (sent_id: test-s97)
+# UNER text: 河姆渡遺址和仰韶遺址出土被認為最原始的陶塤均只有吹孔，而無音孔。
+# UD   text: 河姆渡遗址和仰韶遗址出土被认为最原始的陶埙均只有吹孔，而无音孔。
+merge UNER[0..1] (河姆,渡) -> UD[0] (河姆渡) label=B-LOC
+
+## test zhgsd/test223 (sent_id: test-s223)
+# UNER text: 迦陵舍利塔為松柏環繞，南面一棵松樹，北面一棵柏樹，松樹和柏樹的枝條向白塔生長，似乎是要伸手將白塔抱住，因此得名松柏抱塔。
+# UD   text: 迦陵舍利塔为松柏环绕，南面一棵松树，北面一棵柏树，松树和柏树的枝条向白塔生长，似乎是要伸手将白塔抱住，因此得名松柏抱塔。
+merge UNER[1..2] (舍利,塔) -> UD[1] (舍利塔) label=I-LOC
+
