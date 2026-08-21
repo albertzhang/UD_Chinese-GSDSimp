@@ -26,6 +26,20 @@ normalized (Traditional→Simplified) forms and recorded in `merge.log`.
   `python3 merge_ner.py`.
 * `merge.log` — the 5 divergence blocks (sentence id, UNER/UD surface text, and
   the merge/split events).
+* `view_conllu.py` — stdlib-only terminal viewer: renders a sentence as a
+  colored ASCII dependency tree plus an inline surface line, with `ner=` spans
+  colored by type (PER red / LOC blue / ORG green).
+
+## Viewing in the terminal
+
+```bash
+python3 view_conllu.py dev 3          # one sentence (dev-s3)
+python3 view_conllu.py dev 3 6        # range dev-s3..dev-s6
+python3 view_conllu.py dev-s9         # by sent_id
+python3 view_conllu.py train --entities  # only sentences with named entities
+```
+
+Color auto-disables when stdout is not a TTY, so piping/grep stays plain text.
 
 ## Using the NER layer
 
@@ -144,6 +158,8 @@ If you use this NER layer, please cite:
   * Added "Using the NER layer" usage notes (IOB2 decoding, span reconstruction,
     Python example, divergent-sentence caveat) to README.
   * Added an NER label-distribution table (per-split IOB2 counts) to README.
+  * Added `view_conllu.py`, a stdlib-only terminal viewer (colored ASCII
+    dependency trees + NER span highlighting), with usage notes in README.
 
 * 2025-09-12 v2.16
   * add parallel corpus information to machine-readable metadata
