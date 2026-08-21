@@ -11,8 +11,10 @@ This is a simplified Chinese version of the UD Chinese GSD treebank. It is initi
 
 Each split's CoNLL-U file now carries an IOB2 named-entity layer in the MISC
 column as `ner=<LABEL>`, where `<LABEL>` is one of `O`, `B-PER`, `I-PER`,
-`B-LOC`, `I-LOC`, `B-ORG`, `I-ORG`. The labels are projected from
-UNER_Chinese-GSD (Traditional Chinese IOB2 NER annotations) onto the 4997 shared
+`B-LOC`, `I-LOC`, `B-ORG`, `I-ORG`. The labels are projected from the
+[UNER_Chinese-GSD](https://github.com/UniversalNER/UNER_Chinese-GSD) dataset
+(Traditional Chinese IOB2 NER annotations, part of
+[Universal NER](https://www.universalner.org/)) onto the 4997 shared
 GSD sentences (train/dev/test = 3997/500/500). Alignment is by sentence index
 (`# parallel_id` = `zhgsd/{split}{N}`); for the 4992 sentences with identical
 tokenization the label transfers position-by-position. The 5 sentences whose
@@ -25,11 +27,31 @@ normalized (Traditional→Simplified) forms and recorded in `merge.log`.
 * `merge.log` — the 5 divergence blocks (sentence id, UNER/UD surface text, and
   the merge/split events).
 
+The NER labels are redistributed from the
+[UNER_Chinese-GSD](https://github.com/UniversalNER/UNER_Chinese-GSD) dataset
+([Universal NER](https://www.universalner.org/); based on
+[UD_Chinese-GSD](https://github.com/UniversalDependencies/UD_Chinese-GSD)). The
+labels are licensed under
+[CC BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/), the same license
+as this treebank.
+
+If you use this NER layer, please cite:
+
+```bibtex
+@inproceedings{mayhew2024universal,
+  title={Universal NER: A Gold-Standard Multilingual Named Entity Recognition Benchmark},
+  author={Stephen Mayhew and Terra Blevins and Shuheng Liu and Marek Šuppa and Hila Gonen and Joseph Marvin Imperial and Börje F. Karlsson and Peiqin Lin and Nikola Ljubešić and LJ Miranda and Barbara Plank and Arij Riab and Yuval Pinter},
+  booktitle={Proceedings of the 2024 Conference of the North American Chapter of the Association for Computational Linguistics (NAACL)},
+  year={2024},
+  url={https://aclanthology.org/2024.naacl-long.243/}
+}
+```
+
 # Changelog
 
 * 2026-08-21
   * Added a Named Entity Recognition (NER) layer (`ner=` in MISC; IOB2 labels
-    B/I-PER, B/I-LOC, B/I-ORG, O) projected from UNER_Chinese-GSD onto the 4997
+    B/I-PER, B/I-LOC, B/I-ORG, O) projected from UNER_Chinese-GSD (Universal NER) onto the 4997
     GSD sentences. See `merge_ner.py` and `merge.log`.
 
 * 2025-09-12 v2.16
