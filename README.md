@@ -27,6 +27,74 @@ normalized (Traditional→Simplified) forms and recorded in `merge.log`.
 * `merge.log` — the 5 divergence blocks (sentence id, UNER/UD surface text, and
   the merge/split events).
 
+## Using the NER layer
+
+The `ner=` attribute uses the **IOB2** scheme and is present on every token's
+MISC column:
+
+* `O` — token is outside any named entity.
+* `B-<TYPE>` — token begins an entity of `<TYPE>` (`PER` person, `LOC` location,
+  `ORG` organization).
+* `I-<TYPE>` — token continues the entity opened by the preceding `B-<TYPE>` /
+  `I-<TYPE>` token of the same `<TYPE>`.
+
+An entity span is the maximal run `B-TYPE I-TYPE*`. For example `火星 B-LOC` is
+a one-token LOC entity, while `迦陵 B-LOC` + `舍利塔 I-LOC` form one LOC entity
+across two tokens.
+
+```python
+def extract_entities(path):
+    """Return a list of (entity_type, [token_forms]) spans from a CoNLL-U file."""
+    def ner(misc):
+        if misc == "_":
+            return "O"
+        for f in misc.split("|"):
+            if f.startswith("ner="):
+                return f[4:]
+        return "O"
+
+    spans, cur_type, cur = [], None, []
+    def flush():
+        nonlocal cur_type, cur
+        if cur_type:
+            spans.append((cur_type, cur))
+        cur_type, cur = None, []
+
+    with open(path, encoding="utf-8") as fh:
+        for line in fh:
+            line = line.rstrip("\n")
+            if not line or line.startswith("#"):
+                flush(); continue
+            cols = line.split("\t")
+            if len(cols) != 10:
+                continue
+            form, label = cols[1], ner(cols[9])
+            if label == "O":
+                flush()
+            elif label.startswith("B-"):
+                flush(); cur_type, cur = label[2:], [form]
+            elif label.startswith("I-"):
+                if cur_type == label[2:]:
+                    cur.append(form)
+                else:
+                    flush(); cur_type, cur = label[2:], [form]
+        flush()
+    return spans
+```
+
+Notes:
+
+* Entity boundaries follow the **UD tokenization**, not the original UNER
+  tokenization. On the 5 divergent sentences the alignment walk merges or splits
+  tokens, so an entity may span a single merged UD token (label = first UNER
+  constituent's label) or several split UD tokens (first inherits the label, the
+  rest are `O`). See `merge.log` for the exact events.
+* The layer is orthogonal to the syntactic annotation — consume `ner=` on its
+  own, or join it with `parallel_id` / the dependency parse as your task needs.
+* The per-split token counts and label distribution are asserted by
+  `merge_ner.py` (`EXPECTED_LABELS`) and summarized in `merge.log`; if you use
+  this layer, cite Universal NER (BibTeX above).
+
 The NER labels are redistributed from the
 [UNER_Chinese-GSD](https://github.com/UniversalNER/UNER_Chinese-GSD) dataset
 ([Universal NER](https://www.universalner.org/); based on
@@ -53,6 +121,8 @@ If you use this NER layer, please cite:
   * Added a Named Entity Recognition (NER) layer (`ner=` in MISC; IOB2 labels
     B/I-PER, B/I-LOC, B/I-ORG, O) projected from UNER_Chinese-GSD (Universal NER) onto the 4997
     GSD sentences. See `merge_ner.py` and `merge.log`.
+  * Added "Using the NER layer" usage notes (IOB2 decoding, span reconstruction,
+    Python example, divergent-sentence caveat) to README.
 
 * 2025-09-12 v2.16
   * add parallel corpus information to machine-readable metadata
