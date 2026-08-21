@@ -95,6 +95,26 @@ Notes:
   `merge_ner.py` (`EXPECTED_LABELS`) and summarized in `merge.log`; if you use
   this layer, cite Universal NER (BibTeX above).
 
+### NER label distribution
+
+Token counts per IOB2 label, per split. These are the **output** counts (after the
+5 divergent sentences are merged/split) and are asserted by `merge_ner.py` on
+every run against `EXPECTED_LABELS`:
+
+| Label  |   train |   dev |  test |   total |
+|--------|--------:|------:|------:|--------:|
+| O      |   86699 | 11193 | 10599 |  108491 |
+| B-PER  |    2155 |   238 |   206 |    2599 |
+| I-PER  |    1479 |   165 |   125 |    1769 |
+| B-LOC  |    2871 |   437 |   434 |    3742 |
+| I-LOC  |    2514 |   313 |   337 |    3164 |
+| B-ORG  |    1110 |   135 |   127 |    1372 |
+| I-ORG  |    1786 |   184 |   182 |    2152 |
+| tokens |   98614 | 12665 | 12010 |  123289 |
+
+The only difference from the raw UNER counts is the collapse of the 5 divergent
+sentences (a merged UD token keeps the first constituent's label); see `merge.log`.
+
 The NER labels are redistributed from the
 [UNER_Chinese-GSD](https://github.com/UniversalNER/UNER_Chinese-GSD) dataset
 ([Universal NER](https://www.universalner.org/); based on
@@ -123,6 +143,7 @@ If you use this NER layer, please cite:
     GSD sentences. See `merge_ner.py` and `merge.log`.
   * Added "Using the NER layer" usage notes (IOB2 decoding, span reconstruction,
     Python example, divergent-sentence caveat) to README.
+  * Added an NER label-distribution table (per-split IOB2 counts) to README.
 
 * 2025-09-12 v2.16
   * add parallel corpus information to machine-readable metadata
