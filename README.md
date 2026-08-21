@@ -7,7 +7,30 @@ Simplified Chinese Universal Dependencies dataset converted from the GSD (tradit
 This is a simplified Chinese version of the UD Chinese GSD treebank. It is initially automatically converted into simplified Chinese with the OpenCC tool with patterns for mapping punctuation, then corrected with manual fixes.
 
 
+# Named Entity Recognition (NER) layer
+
+Each split's CoNLL-U file now carries an IOB2 named-entity layer in the MISC
+column as `ner=<LABEL>`, where `<LABEL>` is one of `O`, `B-PER`, `I-PER`,
+`B-LOC`, `I-LOC`, `B-ORG`, `I-ORG`. The labels are projected from
+UNER_Chinese-GSD (Traditional Chinese IOB2 NER annotations) onto the 4997 shared
+GSD sentences (train/dev/test = 3997/500/500). Alignment is by sentence index
+(`# parallel_id` = `zhgsd/{split}{N}`); for the 4992 sentences with identical
+tokenization the label transfers position-by-position. The 5 sentences whose
+tokenization diverges are re-aligned by a deterministic greedy walk over
+normalized (Traditional→Simplified) forms and recorded in `merge.log`.
+
+* `merge_ner.py` — stdlib-only, regenerable pipeline: parse UNER IOB2 and UD
+  CoNLL-U, project labels, append `ner=` to MISC, and self-verify. Run with
+  `python3 merge_ner.py`.
+* `merge.log` — the 5 divergence blocks (sentence id, UNER/UD surface text, and
+  the merge/split events).
+
 # Changelog
+
+* 2026-08-21
+  * Added a Named Entity Recognition (NER) layer (`ner=` in MISC; IOB2 labels
+    B/I-PER, B/I-LOC, B/I-ORG, O) projected from UNER_Chinese-GSD onto the 4997
+    GSD sentences. See `merge_ner.py` and `merge.log`.
 
 * 2025-09-12 v2.16
   * add parallel corpus information to machine-readable metadata
